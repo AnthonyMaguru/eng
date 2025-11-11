@@ -107,6 +107,139 @@ if (applicationForm) {
     });
 }
 
+// Hero Carousel
+function initHeroCarousel() {
+    const slides = document.querySelectorAll('.hero-slide');
+    const dots = document.querySelectorAll('.carousel-dot');
+    const prevButton = document.querySelector('.carousel-prev');
+    const nextButton = document.querySelector('.carousel-next');
+    const heroSection = document.querySelector('.hero');
+    
+    if (slides.length === 0) return;
+    
+    let currentSlide = 0;
+    let carouselInterval;
+    const slideInterval = 5000; // Auto-scroll every 5 seconds (5000 milliseconds)
+    
+    function updateDotAccessibility() {
+        dots.forEach((dot, index) => {
+            if (index === currentSlide) {
+                dot.setAttribute('aria-selected', 'true');
+                dot.setAttribute('tabindex', '0');
+            } else {
+                dot.setAttribute('aria-selected', 'false');
+                dot.setAttribute('tabindex', '-1');
+            }
+        });
+    }
+    
+    function showSlide(index) {
+        // Remove active class from all slides and dots
+        slides.forEach(slide => slide.classList.remove('active'));
+        dots.forEach(dot => dot.classList.remove('active'));
+        
+        // Add active class to current slide and dot
+        if (slides[index]) {
+            slides[index].classList.add('active');
+        }
+        if (dots[index]) {
+            dots[index].classList.add('active');
+        }
+        
+        currentSlide = index;
+        updateDotAccessibility();
+    }
+    
+    function nextSlide() {
+        const next = (currentSlide + 1) % slides.length;
+        showSlide(next);
+    }
+    
+    function prevSlide() {
+        const prev = (currentSlide - 1 + slides.length) % slides.length;
+        showSlide(prev);
+    }
+    
+    function startCarousel() {
+        // Clear any existing interval before starting a new one
+        if (carouselInterval) {
+            clearInterval(carouselInterval);
+        }
+        // Start auto-scrolling - changes slide every 5 seconds
+        carouselInterval = setInterval(() => {
+            nextSlide();
+        }, slideInterval);
+    }
+    
+    function stopCarousel() {
+        clearInterval(carouselInterval);
+    }
+    
+    function resetCarousel() {
+        stopCarousel();
+        startCarousel();
+    }
+    
+    // Navigation buttons
+    if (nextButton) {
+        nextButton.addEventListener('click', () => {
+            nextSlide();
+            resetCarousel();
+        });
+    }
+    
+    if (prevButton) {
+        prevButton.addEventListener('click', () => {
+            prevSlide();
+            resetCarousel();
+        });
+    }
+    
+    // Dot navigation
+    dots.forEach((dot, index) => {
+        dot.addEventListener('click', () => {
+            showSlide(index);
+            resetCarousel();
+            updateDotAccessibility();
+        });
+        
+        dot.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                showSlide(index);
+                resetCarousel();
+                updateDotAccessibility();
+            }
+        });
+    });
+    
+    
+    // Pause on hover
+    if (heroSection) {
+        heroSection.addEventListener('mouseenter', stopCarousel);
+        heroSection.addEventListener('mouseleave', startCarousel);
+    }
+    
+    // Keyboard navigation
+    document.addEventListener('keydown', (e) => {
+        if (heroSection && heroSection.contains(document.activeElement) || document.activeElement === document.body) {
+            if (e.key === 'ArrowLeft') {
+                prevSlide();
+                resetCarousel();
+            } else if (e.key === 'ArrowRight') {
+                nextSlide();
+                resetCarousel();
+            }
+        }
+    });
+    
+    // Initialize accessibility
+    updateDotAccessibility();
+    
+    // Start auto-scrolling
+    startCarousel();
+}
+
 // Update copyright year dynamically
 function updateCopyrightYear() {
     const yearElement = document.getElementById('currentYear');
@@ -118,6 +251,7 @@ function updateCopyrightYear() {
 // Initialize functions when DOM is loaded
 document.addEventListener('DOMContentLoaded', function() {
     updateCopyrightYear();
+    initHeroCarousel();
     initTestimonialSlider();
     
     // Set active navigation link based on current page
