@@ -25,13 +25,27 @@
     <link rel="canonical" href="https://www.innovateengineering.com/about.html">
     <link rel="icon" type="image/x-icon" href="/favicon.ico">
     <link rel="stylesheet" href="style.css">
+    <script>
+        // Prevent flash of wrong theme by applying theme immediately
+        (function() {
+            const theme = localStorage.getItem('theme') || 'light';
+            if (theme === 'dark') {
+                document.documentElement.setAttribute('data-theme', 'dark');
+            }
+        })();
+    </script>
 </head>
 <body>
     <!-- Header -->
     <header>
         <div class="container header-container">
             <a href="index.html" class="logo">Innovate<span>Engineering</span></a>
-            <div class="hamburger" id="hamburger">☰</div>
+            <div class="header-actions">
+                <button class="dark-mode-toggle" id="darkModeToggle" aria-label="Toggle dark mode" title="Toggle dark mode">
+                    <span class="theme-icon">🌙</span>
+                </button>
+                <div class="hamburger" id="hamburger">☰</div>
+            </div>
             <ul class="nav-menu" id="nav-menu">
                 <li><a href="index.html">Home</a></li>
                 <li><a href="about.html" class="active">About Us</a></li>
@@ -126,27 +140,27 @@
                 <div class="team-grid">
                     <div class="team-card">
                         <div class="team-image"></div>
-                        <h3>Dr. Sarah Mitchell</h3>
+                        <h3>Eng. Asante</h3>
                         <p style="color: var(--primary); font-weight: 600;">CEO & Founder</p>
-                        <p>With over 30 years of experience in civil engineering, Dr. Mitchell leads our strategic direction and innovation initiatives.</p>
+                        <p>With over 30 years of experience in civil engineering, Eng. Asante leads our strategic direction and innovation initiatives.</p>
                     </div>
                     <div class="team-card">
                         <div class="team-image"></div>
-                        <h3>Michael Chen</h3>
+                        <h3>Asante Fante</h3>
                         <p style="color: var(--primary); font-weight: 600;">Chief Operations Officer</p>
-                        <p>Michael oversees all operational aspects of our projects, ensuring efficiency, quality, and timely delivery.</p>
+                        <p>Asante Fante oversees all operational aspects of our projects, ensuring efficiency, quality, and timely delivery.</p>
                     </div>
                     <div class="team-card">
                         <div class="team-image"></div>
-                        <h3>Dr. Emily Rodriguez</h3>
+                        <h3>Maguru Anthony</h3>
                         <p style="color: var(--primary); font-weight: 600;">Chief Technology Officer</p>
-                        <p>Dr. Rodriguez leads our R&D efforts and technology integration across all engineering disciplines.</p>
+                        <p>Maguru Anthony leads our R&D efforts and technology integration across all engineering disciplines.</p>
                     </div>
                     <div class="team-card">
                         <div class="team-image"></div>
-                        <h3>David Thompson</h3>
+                        <h3>Josephine Nakyeyune</h3>
                         <p style="color: var(--primary); font-weight: 600;">Director of Projects</p>
-                        <p>David manages our project portfolio and ensures successful execution from conception to completion.</p>
+                        <p>Josephine Nakyeyune manages our project portfolio and ensures successful execution from conception to completion.</p>
                     </div>
                 </div>
             </section>

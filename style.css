@@ -17,6 +17,37 @@
     --border-radius: 4px;
     --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     --transition: all 0.3s ease;
+    
+    /* Light mode (default) */
+    --bg-color: #f8f9fa;
+    --text-color: #343a40;
+    --card-bg: #ffffff;
+    --header-bg: #ffffff;
+    --footer-bg: #343a40;
+    --border-color: #dee2e6;
+    --input-bg: #ffffff;
+    --input-border: #ddd;
+}
+
+[data-theme="dark"] {
+    --primary: #4a9eff;
+    --primary-dark: #2d7dd2;
+    --secondary: #1a1a1a;
+    --accent: #ffc107;
+    --dark: #e9ecef;
+    --light: #2d2d2d;
+    --gray: #adb5bd;
+    
+    /* Dark mode */
+    --bg-color: #121212;
+    --text-color: #e9ecef;
+    --card-bg: #1e1e1e;
+    --header-bg: #1e1e1e;
+    --footer-bg: #0d0d0d;
+    --border-color: #333333;
+    --input-bg: #2d2d2d;
+    --input-border: #444444;
+    --shadow: 0 4px 6px rgba(0, 0, 0, 0.5);
 }
 
 html {
@@ -25,11 +56,12 @@ html {
 
 body {
     line-height: 1.6;
-    color: var(--dark);
-    background-color: var(--secondary);
+    color: var(--text-color);
+    background-color: var(--bg-color);
     display: flex;
     flex-direction: column;
     min-height: 100vh;
+    transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 .container {
@@ -43,6 +75,12 @@ h1, h2, h3, h4, h5, h6 {
     margin-bottom: 1rem;
     line-height: 1.2;
     color: var(--primary);
+    transition: color 0.3s ease;
+}
+
+p {
+    color: var(--text-color);
+    transition: color 0.3s ease;
 }
 
 h1 {
@@ -57,9 +95,6 @@ h3 {
     font-size: 1.5rem;
 }
 
-p {
-    margin-bottom: 1rem;
-}
 
 a {
     text-decoration: none;
@@ -104,11 +139,13 @@ a:hover {
 
 /* Header Styles */
 header {
-    background-color: var(--light);
+    background-color: var(--header-bg);
     box-shadow: var(--shadow);
     position: sticky;
     top: 0;
     z-index: 1000;
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+    border-bottom: 1px solid var(--border-color);
 }
 
 .header-container {
@@ -116,6 +153,61 @@ header {
     justify-content: space-between;
     align-items: center;
     padding: 1rem 0;
+    gap: 1rem;
+}
+
+.header-actions {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+/* Dark Mode Toggle */
+.dark-mode-toggle {
+    background: transparent;
+    border: 2px solid var(--primary);
+    color: var(--primary);
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: var(--transition);
+    font-size: 1.2rem;
+    padding: 0;
+}
+
+.dark-mode-toggle:hover {
+    background-color: var(--primary);
+    color: var(--light);
+    transform: scale(1.1);
+}
+
+.dark-mode-toggle:focus {
+    outline: 3px solid var(--accent);
+    outline-offset: 2px;
+}
+
+[data-theme="dark"] .dark-mode-toggle {
+    border-color: var(--accent);
+    color: var(--accent);
+}
+
+[data-theme="dark"] .dark-mode-toggle:hover {
+    background-color: var(--accent);
+    color: var(--dark);
+}
+
+.theme-icon {
+    display: inline-block;
+    transition: transform 0.3s ease;
+    font-size: 1.2rem;
+}
+
+.dark-mode-toggle:hover .theme-icon {
+    transform: rotate(15deg);
 }
 
 .logo {
@@ -131,6 +223,8 @@ header {
 .nav-menu {
     display: flex;
     list-style: none;
+    background-color: var(--header-bg);
+    transition: background-color 0.3s ease;
 }
 
 .nav-menu li {
@@ -140,6 +234,8 @@ header {
 .nav-menu a {
     font-weight: 600;
     position: relative;
+    color: var(--text-color);
+    transition: color 0.3s ease;
 }
 
 .nav-menu a::after {
@@ -158,10 +254,20 @@ header {
     width: 100%;
 }
 
+.nav-menu a.active {
+    color: var(--primary);
+}
+
+[data-theme="dark"] .nav-menu a.active {
+    color: var(--primary);
+}
+
 .hamburger {
     display: none;
     cursor: pointer;
     font-size: 1.5rem;
+    color: var(--text-color);
+    transition: color 0.3s ease;
 }
 
 /* Hero Section */
@@ -346,6 +452,22 @@ header {
 /* Section Styles */
 section {
     padding: 5rem 0;
+    background-color: var(--bg-color);
+    transition: background-color 0.3s ease;
+}
+
+section[style*="background-color"] {
+    /* Sections with inline background colors will override, but we ensure transitions */
+    transition: background-color 0.3s ease;
+}
+
+.section-alt {
+    background-color: var(--secondary) !important;
+    transition: background-color 0.3s ease;
+}
+
+[data-theme="dark"] .section-alt {
+    background-color: var(--secondary) !important;
 }
 
 .section-title {
@@ -373,12 +495,17 @@ section {
 }
 
 .service-card {
-    background-color: var(--light);
+    background-color: var(--card-bg);
     border-radius: var(--border-radius);
     padding: 2rem;
     box-shadow: var(--shadow);
     transition: var(--transition);
     text-align: center;
+    border: 1px solid var(--border-color);
+}
+
+.service-card p {
+    color: var(--text-color);
 }
 
 .service-card:hover {
@@ -399,11 +526,16 @@ section {
 }
 
 .project-card {
-    background-color: var(--light);
+    background-color: var(--card-bg);
     border-radius: var(--border-radius);
     overflow: hidden;
     box-shadow: var(--shadow);
     transition: var(--transition);
+    border: 1px solid var(--border-color);
+}
+
+.project-content p {
+    color: var(--text-color);
 }
 
 .project-card:hover {
@@ -423,7 +555,13 @@ section {
 
 /* Testimonials */
 .testimonials {
-    background-color: var(--light);
+    background-color: var(--card-bg);
+    border-top: 1px solid var(--border-color);
+    border-bottom: 1px solid var(--border-color);
+}
+
+.testimonial-text {
+    color: var(--text-color);
 }
 
 .testimonial-slider {
@@ -489,6 +627,12 @@ section {
 .page-content {
     padding: 2rem 0;
     flex: 1;
+    background-color: var(--bg-color);
+    transition: background-color 0.3s ease;
+}
+
+.page-content p {
+    color: var(--text-color);
 }
 
 .page-hero {
@@ -496,6 +640,11 @@ section {
     color: var(--light);
     padding: 3rem 0;
     text-align: center;
+    transition: background-color 0.3s ease;
+}
+
+[data-theme="dark"] .page-hero {
+    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
 }
 
 .page-hero h1 {
@@ -510,6 +659,11 @@ section {
 
 .breadcrumb li {
     margin-right: 0.5rem;
+    color: var(--text-color);
+}
+
+.breadcrumb a {
+    color: var(--primary);
 }
 
 .breadcrumb li:not(:last-child)::after {
@@ -526,11 +680,16 @@ section {
 }
 
 .team-card {
-    background-color: var(--light);
+    background-color: var(--card-bg);
     border-radius: var(--border-radius);
     padding: 2rem;
     text-align: center;
     box-shadow: var(--shadow);
+    border: 1px solid var(--border-color);
+}
+
+.team-card p {
+    color: var(--text-color);
 }
 
 .team-image {
@@ -548,11 +707,16 @@ section {
 }
 
 .job-card {
-    background-color: var(--light);
+    background-color: var(--card-bg);
     border-radius: var(--border-radius);
     padding: 2rem;
     margin-bottom: 1.5rem;
     box-shadow: var(--shadow);
+    border: 1px solid var(--border-color);
+}
+
+.job-card p {
+    color: var(--text-color);
 }
 
 .job-meta {
@@ -563,6 +727,10 @@ section {
     font-size: 0.9rem;
 }
 
+.job-meta span {
+    color: var(--gray);
+}
+
 /* Blog Section */
 .blog-grid {
     display: grid;
@@ -571,10 +739,15 @@ section {
 }
 
 .blog-card {
-    background-color: var(--light);
+    background-color: var(--card-bg);
     border-radius: var(--border-radius);
     overflow: hidden;
     box-shadow: var(--shadow);
+    border: 1px solid var(--border-color);
+}
+
+.blog-content p {
+    color: var(--text-color);
 }
 
 .blog-image {
@@ -594,6 +767,10 @@ section {
     font-size: 0.9rem;
 }
 
+.blog-meta span {
+    color: var(--gray);
+}
+
 /* Contact Section */
 .contact-container {
     display: grid;
@@ -602,10 +779,16 @@ section {
 }
 
 .contact-info {
-    background-color: var(--light);
+    background-color: var(--card-bg);
     padding: 2rem;
     border-radius: var(--border-radius);
     box-shadow: var(--shadow);
+    border: 1px solid var(--border-color);
+}
+
+.contact-info h3,
+.contact-info p {
+    color: var(--text-color);
 }
 
 .contact-item {
@@ -621,10 +804,15 @@ section {
 }
 
 .contact-form {
-    background-color: var(--light);
+    background-color: var(--card-bg);
     padding: 2rem;
     border-radius: var(--border-radius);
     box-shadow: var(--shadow);
+    border: 1px solid var(--border-color);
+}
+
+.contact-form h2 {
+    color: var(--text-color);
 }
 
 .form-group {
@@ -642,9 +830,24 @@ section {
 .form-group select {
     width: 100%;
     padding: 0.75rem;
-    border: 1px solid #ddd;
+    border: 1px solid var(--input-border);
     border-radius: var(--border-radius);
     font-size: 1rem;
+    background-color: var(--input-bg);
+    color: var(--text-color);
+    transition: border-color 0.3s ease, background-color 0.3s ease, color 0.3s ease;
+}
+
+.form-group input:focus,
+.form-group textarea:focus,
+.form-group select:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(0, 86, 179, 0.1);
+}
+
+.form-group label {
+    color: var(--text-color);
 }
 
 .form-group textarea {
@@ -654,10 +857,12 @@ section {
 
 /* Footer */
 footer {
-    background-color: var(--dark);
+    background-color: var(--footer-bg);
     color: var(--light);
     padding: 3rem 0 1rem;
     margin-top: auto;
+    transition: background-color 0.3s ease;
+    border-top: 1px solid var(--border-color);
 }
 
 .footer-content {
@@ -693,6 +898,11 @@ footer {
 
 .footer-column a {
     color: #ccc;
+    transition: color 0.3s ease;
+}
+
+[data-theme="dark"] .footer-column a {
+    color: #aaa;
 }
 
 .footer-column a:hover {
@@ -746,18 +956,29 @@ footer {
     .hamburger {
         display: block;
     }
+    
+    .header-actions {
+        order: -1;
+    }
+    
+    .dark-mode-toggle {
+        width: 35px;
+        height: 35px;
+        font-size: 1rem;
+    }
 
     .nav-menu {
         position: fixed;
         top: 70px;
         right: -100%;
         flex-direction: column;
-        background-color: var(--light);
+        background-color: var(--header-bg);
         width: 100%;
         text-align: center;
         transition: var(--transition);
         box-shadow: var(--shadow);
         padding: 2rem 0;
+        border-top: 1px solid var(--border-color);
     }
 
     .nav-menu.active {

@@ -240,6 +240,77 @@ function initHeroCarousel() {
     startCarousel();
 }
 
+// Dark Mode Toggle
+function initDarkMode() {
+    const darkModeToggle = document.getElementById('darkModeToggle');
+    const themeIcon = darkModeToggle?.querySelector('.theme-icon');
+    const html = document.documentElement;
+    
+    // Check for saved theme preference or default to light mode
+    const currentTheme = localStorage.getItem('theme') || 'light';
+    
+    // Apply the saved theme
+    if (currentTheme === 'dark') {
+        html.setAttribute('data-theme', 'dark');
+        if (themeIcon) {
+            themeIcon.textContent = '☀️';
+        }
+    } else {
+        html.removeAttribute('data-theme');
+        if (themeIcon) {
+            themeIcon.textContent = '🌙';
+        }
+    }
+    
+    // Toggle function
+    function toggleDarkMode() {
+        const currentTheme = html.getAttribute('data-theme');
+        
+        if (currentTheme === 'dark') {
+            // Switch to light mode
+            html.removeAttribute('data-theme');
+            localStorage.setItem('theme', 'light');
+            if (themeIcon) {
+                themeIcon.textContent = '🌙';
+            }
+        } else {
+            // Switch to dark mode
+            html.setAttribute('data-theme', 'dark');
+            localStorage.setItem('theme', 'dark');
+            if (themeIcon) {
+                themeIcon.textContent = '☀️';
+            }
+        }
+    }
+    
+    // Add click event listener
+    if (darkModeToggle) {
+        darkModeToggle.addEventListener('click', toggleDarkMode);
+    }
+    
+    // Listen for system theme changes (optional)
+    if (window.matchMedia) {
+        const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+        
+        // Only apply system preference if user hasn't manually set a preference
+        if (!localStorage.getItem('theme')) {
+            mediaQuery.addEventListener('change', (e) => {
+                if (e.matches) {
+                    html.setAttribute('data-theme', 'dark');
+                    if (themeIcon) {
+                        themeIcon.textContent = '☀️';
+                    }
+                } else {
+                    html.removeAttribute('data-theme');
+                    if (themeIcon) {
+                        themeIcon.textContent = '🌙';
+                    }
+                }
+            });
+        }
+    }
+}
+
 // Update copyright year dynamically
 function updateCopyrightYear() {
     const yearElement = document.getElementById('currentYear');
@@ -250,6 +321,8 @@ function updateCopyrightYear() {
 
 // Initialize functions when DOM is loaded
 document.addEventListener('DOMContentLoaded', function() {
+    // Initialize dark mode first to prevent flash of wrong theme
+    initDarkMode();
     updateCopyrightYear();
     initHeroCarousel();
     initTestimonialSlider();

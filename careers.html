@@ -25,6 +25,15 @@
     <link rel="canonical" href="https://www.innovateengineering.com/careers.html">
     <link rel="icon" type="image/x-icon" href="/favicon.ico">
     <link rel="stylesheet" href="style.css">
+    <script>
+        // Prevent flash of wrong theme by applying theme immediately
+        (function() {
+            const theme = localStorage.getItem('theme') || 'light';
+            if (theme === 'dark') {
+                document.documentElement.setAttribute('data-theme', 'dark');
+            }
+        })();
+    </script>
     
     <!-- Structured Data -->
     <script type="application/ld+json">
@@ -55,7 +64,12 @@
     <header>
         <div class="container header-container">
             <a href="index.html" class="logo">Innovate<span>Engineering</span></a>
-            <div class="hamburger" id="hamburger">☰</div>
+            <div class="header-actions">
+                <button class="dark-mode-toggle" id="darkModeToggle" aria-label="Toggle dark mode" title="Toggle dark mode">
+                    <span class="theme-icon">🌙</span>
+                </button>
+                <div class="hamburger" id="hamburger">☰</div>
+            </div>
             <ul class="nav-menu" id="nav-menu">
                 <li><a href="index.html">Home</a></li>
                 <li><a href="about.html">About Us</a></li>
